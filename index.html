@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Peluang</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        p {
+            line-height: 1.6;
+        }
+        input[type="number"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .correct {
+            color: #27ae60;
+        }
+        .incorrect {
+            color: #e74c3c;
+        }
+        .options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .options button {
+            flex: 1;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .options button:hover {
+            background: #2980b9;
+        }
+        .uploaded-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Media Pembelajaran Peluang</h1>
+
+        <!-- Penjelasan Singkat -->
+        <div class="card">
+            <h2>Apa itu Peluang?</h2>
+            <p>Peluang adalah ukuran kemungkinan terjadinya suatu peristiwa. Nilai peluang berkisar antara 0 (tidak mungkin terjadi) hingga 1 (pasti terjadi).</p>
+            <p>Rumus peluang:</p>
+            <p><strong>P(A) = n(A) / n(S)</strong></p>
+            <p>Dimana:</p>
+            <ul>
+                <li><strong>P(A)</strong>: Peluang kejadian A</li>
+                <li><strong>n(A)</strong>: Banyaknya kejadian A</li>
+                <li><strong>n(S)</strong>: Banyaknya semua kejadian yang mungkin</li>
+            </ul>
+        </div>
+
+        <!-- Contoh Soal dengan Opsi Jawaban -->
+        <div class="card">
+            <h2>Contoh Soal</h2>
+            <p>Sebuah dadu dilempar sekali. Berapa peluang munculnya mata dadu 3?</p>
+            <div class="options">
+                <button onclick="cekJawaban(1/6)">1/6</button>
+                <button onclick="cekJawaban(1/3)">1/3</button>
+                <button onclick="cekJawaban(1/2)">1/2</button>
+                <button onclick="cekJawaban(2/3)">2/3</button>
+            </div>
+            <div class="result" id="feedback"></div>
+        </div>
+
+        <!-- Unggah Gambar -->
+        <div class="card">
+            <h2>Unggah Gambar</h2>
+            <p>Anda dapat mengunggah gambar dari komputer Anda untuk menambahkan ilustrasi atau contoh visual:</p>
+            <input type="file" id="imageUpload" accept="image/*">
+            <div id="imagePreview"></div>
+        </div>
+
+        <!-- Kalkulator Peluang -->
+        <div class="card">
+            <h2>Kalkulator Peluang</h2>
+            <p>Masukkan nilai n(A) dan n(S) untuk menghitung peluang:</p>
+            <input type="number" id="nA" placeholder="Masukkan n(A)">
+            <input type="number" id="nS" placeholder="Masukkan n(S)">
+            <button onclick="hitungPeluang()">Hitung Peluang</button>
+            <div class="result" id="hasil"></div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menghitung peluang
+        function hitungPeluang() {
+            const nA = parseFloat(document.getElementById('nA').value);
+            const nS = parseFloat(document.getElementById('nS').value);
+
+            if (isNaN(nA) || isNaN(nS) || nS === 0) {
+                document.getElementById('hasil').innerText = "Masukkan nilai yang valid!";
+                return;
+            }
+
+            const peluang = nA / nS;
+            document.getElementById('hasil').innerText = `Peluang: ${peluang.toFixed(4)} atau ${(peluang * 100).toFixed(2)}%`;
+        }
+
+        // Fungsi untuk mengecek jawaban
+        function cekJawaban(jawabanPengguna) {
+            const jawabanBenar = 1 / 6; // Jawaban benar adalah 1/6
+            const feedbackElement = document.getElementById('feedback');
+
+            if (jawabanPengguna === jawabanBenar) {
+                feedbackElement.innerText = "Jawaban Anda Benar! 🎉";
+                feedbackElement.className = "result correct";
+            } else {
+                feedbackElement.innerText = "Jawaban Anda Salah. Coba lagi! 😢";
+                feedbackElement.className = "result incorrect";
+            }
+        }
+
+        // Fungsi untuk menampilkan gambar yang diunggah
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image" class="uploaded-image">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html> 
